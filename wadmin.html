@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard - Women Safety</title>
+<style>
+body { margin:0; font-family:Arial, sans-serif; background:#fff0f5; }
+header { background:#d63384; color:white; padding:15px; text-align:center; }
+.dashboard { max-width:900px; margin:40px auto; padding:20px; }
+h2 { color:#b30059; text-align:center; }
+.card-row { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-top:30px; }
+.card {
+    background:white; border-radius:10px; padding:25px;
+    width:200px; text-align:center;
+    box-shadow:0 0 10px rgba(0,0,0,0.1); cursor:pointer;
+}
+.card:hover { background:#ffe6f0; }
+.card h3 { color:#d63384; margin-bottom:5px; }
+.card p { color:#555; font-size:13px; }
+.card a { text-decoration:none; color:inherit; }
+.stats { display:flex; gap:20px; justify-content:center; margin-top:30px; flex-wrap:wrap; }
+.stat-box { background:#d63384; color:white; border-radius:10px; padding:20px 30px; text-align:center; }
+.stat-box h1 { margin:0; font-size:36px; }
+.stat-box p { margin:5px 0 0; }
+.logout-btn {
+    display:block; width:150px; margin:30px auto;
+    padding:10px; background:#b30059; color:white;
+    text-align:center; text-decoration:none; border-radius:5px; font-size:15px;
+}
+.logout-btn:hover { background:#8b0040; }
+</style>
+</head>
+<body>
+
+<header><h2>Admin Dashboard - Women Safety & Welfare</h2></header>
+
+<div class="dashboard">
+<h2>Welcome, Admin</h2>
+
+<div class="stats">
+    <div class="stat-box">
+        <h1 id="totalComplaints">--</h1>
+        <p>Total Complaints</p>
+    </div>
+    <div class="stat-box" style="background:#b30059;">
+        <h1 id="totalUsers">--</h1>
+        <p>Registered Users</p>
+    </div>
+</div>
+
+<div class="card-row">
+    <div class="card">
+        <a href="wadmin_complaints.php">
+        <h3>📋</h3>
+        <h3>View Complaints</h3>
+        <p>See all filed complaints</p>
+        </a>
+    </div>
+    <div class="card">
+        <a href="wadmin_users.php">
+        <h3>👥</h3>
+        <h3>Manage Users</h3>
+        <p>View registered users</p>
+        </a>
+    </div>
+    <div class="card">
+        <a href="wprogram.html">
+        <h3>📢</h3>
+        <h3>Programs</h3>
+        <p>View welfare programs</p>
+        </a>
+    </div>
+    <div class="card">
+        <a href="wabout.html">
+        <h3>ℹ️</h3>
+        <h3>About</h3>
+        <p>Platform information</p>
+        </a>
+    </div>
+</div>
+
+<a href="wlogin.html" class="logout-btn">🔓 Logout</a>
+</div>
+
+</body>
+</html>

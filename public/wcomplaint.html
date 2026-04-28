@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>File Complaint - Women Safety</title>
+<style>
+body{ margin:0; font-family:Arial,sans-serif; background:#ffe6f0; }
+header{ background:#d63384; color:white; padding:15px; text-align:center; }
+nav{ background:#f8c6d8; padding:10px; text-align:center; }
+nav a{ margin:15px; text-decoration:none; color:black; font-weight:bold; }
+.section{ padding:40px; max-width:650px; margin:auto; }
+h2{ color:#b30059; text-align:center; }
+label{ font-weight:bold; display:block; margin-top:15px; }
+input, select, textarea{ width:100%; padding:10px; margin-top:5px; border-radius:5px; border:1px solid #ccc; box-sizing:border-box; font-size:14px; }
+textarea{ height:120px; resize:vertical; }
+button{ width:100%; padding:12px; margin-top:20px; background:#d63384; color:white; border:none; font-size:16px; cursor:pointer; border-radius:5px; }
+button:hover{ background:#b30059; }
+.form-box{ background:white; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+.footer{ background:#d63384; color:white; padding:15px; text-align:center; margin-top:40px; }
+.success-msg{ display:none; background:#d4edda; color:#155724; padding:15px; border-radius:5px; text-align:center; margin-top:15px; }
+</style>
+</head>
+<body>
+
+<header><h2>Women Safety & Welfare System</h2></header>
+<nav>
+  <a href="women.html">Home</a>
+  <a href="wabout.html">About</a>
+  <a href="wprogram.html">Programs</a>
+  <a href="wlogin.html">Login</a>
+</nav>
+
+<div class="section">
+<h2>File a Complaint</h2>
+<p style="text-align:center;color:#555;">Your complaint is confidential and handled with priority.</p>
+
+<div class="form-box">
+<form onsubmit="submitComplaint(); return false;">
+  <label>Your Name</label>
+  <input type="text" id="name" placeholder="Enter your full name" required>
+
+  <label>Phone Number</label>
+  <input type="text" id="phone" placeholder="Enter your phone number" required>
+
+  <label>Email (Optional)</label>
+  <input type="email" id="email" placeholder="Enter your email">
+
+  <label>Type of Complaint</label>
+  <select id="complaint_type" required>
+    <option value="">-- Select Type --</option>
+    <option>Harassment</option>
+    <option>Domestic Violence</option>
+    <option>Stalking</option>
+    <option>Cyber Crime</option>
+    <option>Workplace Abuse</option>
+    <option>Other</option>
+  </select>
+
+  <label>Location / City</label>
+  <input type="text" id="location" placeholder="Where did this happen?" required>
+
+  <label>Describe the Incident</label>
+  <textarea id="description" placeholder="Describe what happened..." required></textarea>
+
+  <button type="submit" id="submitBtn">Submit Complaint</button>
+</form>
+<div class="success-msg" id="successMsg">✅ Complaint submitted successfully! We will contact you shortly.</div>
+</div>
+</div>
+
+<div class="footer"><p>Women Helpline: 181 | Police: 100 | Ambulance: 108</p></div>
+
+<script>
+async function submitComplaint(){
+    var btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.innerText = "Submitting...";
+
+    const body = {
+        name:           document.getElementById("name").value,
+        phone:          document.getElementById("phone").value,
+        email:          document.getElementById("email").value,
+        complaint_type: document.getElementById("complaint_type").value,
+        location:       document.getElementById("location").value,
+        description:    document.getElementById("description").value
+    };
+
+    try {
+        const res  = await fetch("/api/complaint/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+
+        if(data.success){
+            document.getElementById("successMsg").style.display = "block";
+            document.querySelector("form").reset();
+            setTimeout(() => document.getElementById("successMsg").style.display = "none", 5000);
+        } else {
+            alert("Error: " + data.message);
+        }
+    } catch(err){
+        alert("Cannot connect to server. Make sure server.js is running.");
+    }
+
+    btn.disabled = false;
+    btn.innerText = "Submit Complaint";
+}
+</script>
+
+</body>
+</html>

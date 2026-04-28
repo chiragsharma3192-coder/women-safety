@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Profile - Women Safety</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #ffe6f0; }
+header { background: #d63384; color: white; padding: 15px; text-align: center; }
+nav { background: #f8c6d8; padding: 10px; text-align: center; }
+nav a { margin: 0 15px; text-decoration: none; color: #333; font-weight: bold; }
+nav a:hover { color: #d63384; }
+
+.section { padding: 30px 20px; max-width: 580px; margin: auto; }
+h2 { color: #b30059; text-align: center; margin-bottom: 25px; font-size: 26px; }
+
+/* Avatar */
+.avatar { width: 80px; height: 80px; background: #d63384; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 36px; color: white; }
+
+/* Tabs */
+.tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-btn {
+  flex: 1; padding: 10px; border: 2px solid #d63384;
+  background: white; color: #d63384; border-radius: 8px;
+  cursor: pointer; font-weight: bold; font-size: 13px; text-align: center;
+}
+.tab-btn.active { background: #d63384; color: white; }
+.tab-btn:hover { background: #ffe6f0; }
+.tab-btn.active:hover { background: #b30059; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.form-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+
+/* View info rows */
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+.info-row:last-child { border-bottom: none; }
+.info-label { font-size: 13px; color: #888; font-weight: bold; }
+.info-value { font-size: 15px; color: #333; font-weight: 500; }
+.not-set { color: #ccc; font-style: italic; }
+
+label { font-weight: bold; display: block; margin-top: 14px; font-size: 14px; color: #555; }
+input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; }
+input:focus, select:focus { border-color: #d63384; outline: none; box-shadow: 0 0 0 3px rgba(214,51,132,0.1); }
+
+.btn { padding: 12px 25px; margin-top: 20px; margin-right: 8px; background: #d63384; color: white; border: none; font-size: 15px; cursor: pointer; border-radius: 25px; font-weight: bold; }
+.btn:hover { background: #b30059; }
+.btn-grey { background: #6c757d; }
+.btn-grey:hover { background: #5a6268; }
+.btn-full { width: 100%; display: block; }
+
+.alert { padding: 12px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; display: none; }
+.alert.success { background: #d4edda; color: #155724; display: block; }
+.alert.error   { background: #f8d7da; color: #721c24; display: block; }
+
+.section-divider { background: #d63384; color: white; padding: 8px 15px; border-radius: 6px; margin: 20px 0 15px; font-size: 13px; font-weight: bold; }
+
+footer { background: #b30059; color: white; padding: 15px; text-align: center; font-size: 13px; margin-top: 30px; }
+</style>
+</head>
+<body>
+
+<header><h2>🌸 Women Safety & Welfare System</h2></header>
+<nav>
+  <a href="women.html">Home</a>
+  <a href="wabout.html">About</a>
+  <a href="wcomplaint.html">File Complaint</a>
+  <a href="wprogram.html">Programs</a>
+  <a href="wlogin.html">Logout</a>
+</nav>
+
+<div class="section">
+  <div class="avatar">👤</div>
+  <h2 id="profileTitle">My Profile</h2>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab-btn active" onclick="switchTab('view', this)">👁️ View Profile</div>
+    <div class="tab-btn" onclick="switchTab('edit', this)">✏️ Edit Profile</div>
+    <div class="tab-btn" onclick="switchTab('emergency', this)">🚨 Emergency Contact</div>
+    <div class="tab-btn" onclick="switchTab('password', this)">🔒 Change Password</div>
+  </div>
+
+  <!-- TAB 1: VIEW -->
+  <div id="tab-view" class="tab-content active">
+    <div class="form-box">
+      <div id="viewAlert" class="alert"></div>
+      <div class="section-divider">👤 Personal Information</div>
+      <div class="info-row"><span class="info-label">Full Name</span><span class="info-value" id="v_name">--</span></div>
+      <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="v_email">--</span></div>
+      <div class="info-row"><span class="info-label">Phone</span><span class="info-value" id="v_phone">--</span></div>
+      <div class="section-divider">🚨 Emergency Contact</div>
+      <div class="info-row"><span class="info-label">Contact Name</span><span class="info-value" id="v_ename">--</span></div>
+      <div class="info-row"><span class="info-label">Phone</span><span class="info-value" id="v_ephone">--</span></div>
+      <div class="info-row"><span class="info-label">Relation</span><span class="info-value" id="v_erelation">--</span></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: EDIT PROFILE -->
+  <div id="tab-edit" class="tab-content">
+    <div class="form-box">
+      <div id="editAlert" class="alert"></div>
+      <div class="section-divider">✏️ Edit Personal Information</div>
+      <form onsubmit="updateProfile(); return false;">
+        <label>Full Name</label>
+        <input type="text" id="e_fullname" placeholder="Your full name" required>
+        <label>Email</label>
+        <input type="email" id="e_email" placeholder="Your email" required>
+        <label>Phone Number</label>
+        <input type="text" id="e_phone" placeholder="Your phone number" required>
+        <button type="submit" class="btn btn-full" id="editBtn">💾 Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TAB 3: EMERGENCY CONTACT -->
+  <div id="tab-emergency" class="tab-content">
+    <div class="form-box">
+      <div id="emergencyAlert" class="alert"></div>
+      <div class="section-divider">🚨 Emergency Contact Details</div>
+      <p style="font-size:13px; color:#888; margin-bottom:5px;">This person will be called when you press Emergency SOS.</p>
+      <form onsubmit="updateEmergency(); return false;">
+        <label>Contact Name</label>
+        <input type="text" id="em_name" placeholder="e.g. Mom, Dad, Sister" required>
+        <label>Contact Phone</label>
+        <input type="text" id="em_phone" placeholder="Their phone number" required>
+        <label>Relation</label>
+        <select id="em_relation" required>
+          <option value="">-- Select Relation --</option>
+          <option>Mother</option>
+          <option>Father</option>
+          <option>Sister</option>
+          <option>Brother</option>
+          <option>Husband</option>
+          <option>Friend</option>
+          <option>Other</option>
+        </select>
+        <button type="submit" class="btn btn-full" id="emergencyBtn">💾 Save Emergency Contact</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TAB 4: CHANGE PASSWORD -->
+  <div id="tab-password" class="tab-content">
+    <div class="form-box">
+      <div id="passAlert" class="alert"></div>
+      <div class="section-divider">🔒 Change Password</div>
+      <form onsubmit="changePassword(); return false;">
+        <label>Current Password</label>
+        <input type="password" id="old_pass" placeholder="Enter current password" required>
+        <label>New Password</label>
+        <input type="password" id="new_pass" placeholder="Enter new password (min 6 chars)" required>
+        <label>Confirm New Password</label>
+        <input type="password" id="confirm_pass" placeholder="Confirm new password" required>
+        <button type="submit" class="btn btn-full" id="passBtn">🔒 Change Password</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<footer><p>© 2024 Women Safety & Welfare System | All Rights Reserved</p></footer>
+
+<script>
+var userEmail = localStorage.getItem("user_email");
+if(!userEmail){ alert("Please login first!"); window.location.href = "wlogin.html"; }
+
+// Switch tabs
+function switchTab(tab, el){
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + tab).classList.add("active");
+  el.classList.add("active");
+}
+
+// Load profile data
+async function loadProfile(){
+  try {
+    const res  = await fetch("/api/users/profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail })
+    });
+    const data = await res.json();
+    if(data.success){
+      var u = data.user;
+      // View tab
+      document.getElementById("v_name").innerText      = u.fullname || "--";
+      document.getElementById("v_email").innerText     = u.email    || "--";
+      document.getElementById("v_phone").innerText     = u.phone    || "--";
+      document.getElementById("v_ename").innerText     = u.emergency_name     || "Not set";
+      document.getElementById("v_ephone").innerText    = u.emergency_phone    || "Not set";
+      document.getElementById("v_erelation").innerText = u.emergency_relation || "Not set";
+      document.getElementById("profileTitle").innerText = u.fullname + "'s Profile";
+
+      // Edit tab pre-fill
+      document.getElementById("e_fullname").value = u.fullname || "";
+      document.getElementById("e_email").value    = u.email    || "";
+      document.getElementById("e_phone").value    = u.phone    || "";
+
+      // Emergency tab pre-fill
+      document.getElementById("em_name").value     = u.emergency_name     || "";
+      document.getElementById("em_phone").value    = u.emergency_phone    || "";
+      document.getElementById("em_relation").value = u.emergency_relation || "";
+    }
+  } catch(err){ console.log(err); }
+}
+
+// Update full profile
+async function updateProfile(){
+  var btn = document.getElementById("editBtn");
+  btn.disabled = true; btn.innerText = "Saving...";
+  try {
+    const res  = await fetch("/api/users/update-profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email:     userEmail,
+        fullname:  document.getElementById("e_fullname").value,
+        new_email: document.getElementById("e_email").value,
+        phone:     document.getElementById("e_phone").value,
+        emergency_name:     document.getElementById("em_name").value,
+        emergency_phone:    document.getElementById("em_phone").value,
+        emergency_relation: document.getElementById("em_relation").value
+      })
+    });
+    const data = await res.json();
+    showAlert("editAlert", data.success, data.message);
+    if(data.success){
+      // Update localStorage with new email
+      localStorage.setItem("user_email", data.new_email);
+      localStorage.setItem("user_name",  document.getElementById("e_fullname").value);
+      userEmail = data.new_email;
+      loadProfile();
+    }
+  } catch(err){ showAlert("editAlert", false, "Cannot connect to server."); }
+  btn.disabled = false; btn.innerText = "💾 Save Changes";
+}
+
+// Update emergency contact only
+async function updateEmergency(){
+  var btn = document.getElementById("emergencyBtn");
+  btn.disabled = true; btn.innerText = "Saving...";
+  try {
+    const emergency_name     = document.getElementById("em_name").value;
+    const emergency_phone    = document.getElementById("em_phone").value;
+    const emergency_relation = document.getElementById("em_relation").value;
+    const res  = await fetch("/api/users/update-emergency", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, emergency_name, emergency_phone, emergency_relation })
+    });
+    const data = await res.json();
+    showAlert("emergencyAlert", data.success, data.message);
+    if(data.success){
+      localStorage.setItem("emergency_name",     emergency_name);
+      localStorage.setItem("emergency_phone",    emergency_phone);
+      localStorage.setItem("emergency_relation", emergency_relation);
+      loadProfile();
+    }
+  } catch(err){ showAlert("emergencyAlert", false, "Cannot connect to server."); }
+  btn.disabled = false; btn.innerText = "💾 Save Emergency Contact";
+}
+
+// Change password
+async function changePassword(){
+  var old_pass     = document.getElementById("old_pass").value;
+  var new_pass     = document.getElementById("new_pass").value;
+  var confirm_pass = document.getElementById("confirm_pass").value;
+  if(new_pass !== confirm_pass){ showAlert("passAlert", false, "New passwords do not match!"); return; }
+  if(new_pass.length < 6){ showAlert("passAlert", false, "Password must be at least 6 characters."); return; }
+  var btn = document.getElementById("passBtn");
+  btn.disabled = true; btn.innerText = "Changing...";
+  try {
+    const res  = await fetch("/api/users/change-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, old_password: old_pass, new_password: new_pass })
+    });
+    const data = await res.json();
+    showAlert("passAlert", data.success, data.message);
+    if(data.success){ document.querySelector("#tab-password form").reset(); }
+  } catch(err){ showAlert("passAlert", false, "Cannot connect to server."); }
+  btn.disabled = false; btn.innerText = "🔒 Change Password";
+}
+
+function showAlert(id, success, msg){
+  var el = document.getElementById(id);
+  el.className = "alert " + (success ? "success" : "error");
+  el.innerText = (success ? "✅ " : "❌ ") + msg;
+  setTimeout(() => { el.style.display = "none"; }, 4000);
+}
+
+loadProfile();
+</script>
+</body>
+</html>

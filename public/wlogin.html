@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - Women Safety & Welfare</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #ffe6f0; }
+header { background: #d63384; color: white; padding: 15px; text-align: center; }
+.login-box { width: 350px; margin: 80px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.15); }
+.login-box h2 { text-align: center; color: #b30059; margin-bottom: 20px; }
+label { font-weight: bold; display: block; margin-top: 12px; font-size: 14px; }
+input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+input:focus { border-color: #d63384; outline: none; }
+button { width: 100%; padding: 12px; margin-top: 20px; background: #d63384; color: white; border: none; font-size: 16px; cursor: pointer; border-radius: 25px; font-weight: bold; }
+button:hover { background: #b30059; }
+p { text-align: center; margin-top: 15px; font-size: 14px; }
+a { color: #d63384; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header><h2>🌸 Women Safety & Welfare System</h2></header>
+
+<div class="login-box">
+  <h2>Login</h2>
+  <form onsubmit="validateLogin(); return false;">
+    <label>Email</label>
+    <input type="text" id="username" placeholder="Enter email  (or 'admin')" required>
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Enter password" required>
+    <button type="submit" id="loginBtn">Login</button>
+    <p>New User? <a href="wregistration.html">Register Here</a></p>
+  </form>
+</div>
+
+<script>
+async function validateLogin(){
+  var email = document.getElementById("username").value;
+  var pass  = document.getElementById("password").value;
+  var btn   = document.getElementById("loginBtn");
+
+  btn.disabled = true; btn.innerText = "Logging in...";
+
+  try {
+    const res  = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+
+    if(data.success){
+      if(data.role === "admin"){
+        alert("Welcome Admin!");
+        window.location.href = "wadmin.html";
+      } else {
+        // Save emergency contact in browser storage for SOS use
+        localStorage.setItem("user_name",           data.name);
+        localStorage.setItem("user_email",          email);
+        localStorage.setItem("user_phone",          data.phone         || "");
+        localStorage.setItem("emergency_name",      data.emergency_name     || "");
+        localStorage.setItem("emergency_phone",     data.emergency_phone    || "");
+        localStorage.setItem("emergency_relation",  data.emergency_relation || "");
+        alert("Welcome, " + data.name + "!");
+        window.location.href = "women.html";
+      }
+    } else {
+      alert(data.message || "Invalid credentials!");
+    }
+  } catch(err){
+    alert("Cannot connect to server. Make sure server is running.");
+  }
+
+  btn.disabled = false; btn.innerText = "Login";
+}
+</script>
+</body>
+</html>

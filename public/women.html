@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Women Safety & Welfare</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fff; }
+header { background: #d63384; color: white; padding: 15px; text-align: center; }
+header h2 { font-size: 22px; }
+nav { background: #f8c6d8; padding: 10px; text-align: center; }
+nav a { margin: 0 15px; text-decoration: none; color: #333; font-weight: bold; font-size: 14px; }
+nav a:hover { color: #d63384; }
+.hero { background: linear-gradient(135deg, #ffe6f0, #ffc2d4); padding: 70px 20px; text-align: center; }
+.hero h1 { font-size: 38px; color: #b30059; margin-bottom: 10px; }
+.hero p { font-size: 16px; color: #555; margin-bottom: 25px; }
+.btn { padding: 12px 28px; margin: 8px; border: none; border-radius: 25px; font-size: 15px; cursor: pointer; font-weight: bold; }
+.btn-red { background: #d63384; color: white; }
+.btn-red:hover { background: #b30059; }
+.btn-outline { background: white; color: #d63384; border: 2px solid #d63384; }
+.btn-outline:hover { background: #ffe6f0; }
+
+/* SOS popup overlay */
+.sos-overlay {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+  z-index: 999; justify-content: center; align-items: center;
+}
+.sos-overlay.active { display: flex; }
+.sos-box {
+  background: white; border-radius: 16px; padding: 35px 30px;
+  max-width: 380px; width: 90%; text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.sos-box h2 { color: #d63384; font-size: 24px; margin-bottom: 10px; }
+.sos-box p { color: #555; margin-bottom: 8px; font-size: 15px; }
+.sos-box .contact-name { font-size: 22px; font-weight: bold; color: #b30059; margin: 10px 0 5px; }
+.sos-box .contact-phone { font-size: 28px; font-weight: bold; color: #d63384; }
+.sos-box .relation-tag { background: #ffe6f0; color: #d63384; padding: 4px 14px; border-radius: 20px; font-size: 13px; display: inline-block; margin-bottom: 20px; }
+.call-btn { display: block; width: 100%; padding: 14px; background: #28a745; color: white; border: none; border-radius: 25px; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 10px; text-decoration: none; }
+.call-btn:hover { background: #218838; }
+.close-btn { background: #ccc; color: #333; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-size: 14px; }
+
+.features { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 50px 20px; }
+.feature-card { background: #fff0f5; border-radius: 12px; padding: 25px 20px; width: 200px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.feature-card .icon { font-size: 36px; margin-bottom: 10px; }
+.feature-card h3 { color: #b30059; font-size: 15px; margin-bottom: 6px; }
+.feature-card p { font-size: 13px; color: #666; }
+.helpline { background: #d63384; color: white; padding: 30px 20px; text-align: center; }
+.helpline h2 { margin-bottom: 15px; }
+.helpline-numbers { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.helpline-box { background: rgba(255,255,255,0.2); border-radius: 10px; padding: 15px 25px; min-width: 130px; }
+.helpline-box h1 { font-size: 30px; }
+.helpline-box p { font-size: 13px; }
+footer { background: #b30059; color: white; padding: 15px; text-align: center; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header><h2>🌸 Women Safety & Welfare System</h2></header>
+<nav>
+  <a href="women.html">Home</a>
+  <a href="wabout.html">About</a>
+  <a href="wcomplaint.html">File Complaint</a>
+  <a href="wprogram.html">Programs</a>
+  <a href="wprofile.html">👤 My Profile</a>
+  <a href="wlogin.html">Logout</a>
+</nav>
+
+<div class="hero">
+  <h1>Your Safety is Our Priority</h1>
+  <p>Instant Help &nbsp;|&nbsp; Secure Platform &nbsp;|&nbsp; Empowering Women</p>
+  <button class="btn btn-red" onclick="sendSOS()">🚨 Emergency SOS</button>
+  <button class="btn btn-outline" onclick="window.location.href='wcomplaint.html'">📋 File Complaint</button>
+</div>
+
+<!-- FULLSCREEN SOS SCREEN -->
+<div id="sosScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  z-index:9999; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:30px; box-sizing:border-box; overflow-y:auto;">
+
+  <div style="font-size:70px; animation: pulse 0.5s infinite alternate;">🚨</div>
+  <h1 style="color:white; font-size:28px; margin:8px 0;">SOS ALERT!</h1>
+
+  <div style="background:rgba(255,255,255,0.2); border-radius:16px; padding:15px 25px; margin:15px 0; width:100%; max-width:340px;">
+    <div style="color:white; font-size:20px; font-weight:bold;" id="sos_name">--</div>
+    <div style="color:rgba(255,255,255,0.8); font-size:13px; margin:4px 0;" id="sos_rel"></div>
+    <div style="color:white; font-size:30px; font-weight:bold; letter-spacing:2px;" id="sos_phone">--</div>
+  </div>
+
+  <!-- Location status -->
+  <div id="sos_location_status" style="color:rgba(255,255,255,0.9); font-size:13px; margin-bottom:15px;">
+    📍 Getting your location...
+  </div>
+
+  <!-- CALL BUTTON -->
+  <a id="sos_call_btn" href="#"
+    style="display:block; background:#27ae60; color:white; font-size:20px; font-weight:bold;
+    padding:16px; border-radius:50px; text-decoration:none; margin-bottom:10px; width:100%; max-width:340px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);">
+    📞 TAP TO CALL
+  </a>
+
+  <!-- WHATSAPP EMERGENCY CONTACT -->
+  <a id="sos_wa_emergency" href="#" target="_blank"
+    style="display:block; background:#25D366; color:white; font-size:16px; font-weight:bold;
+    padding:13px; border-radius:50px; text-decoration:none; margin-bottom:10px; width:100%; max-width:340px; opacity:0.5;">
+    💬 WhatsApp Emergency Contact
+  </a>
+
+  <!-- WHATSAPP ADMIN -->
+  <a id="sos_wa_admin" href="#" target="_blank"
+    style="display:block; background:#128C7E; color:white; font-size:16px; font-weight:bold;
+    padding:13px; border-radius:50px; text-decoration:none; margin-bottom:10px; width:100%; max-width:340px; opacity:0.5;">
+    💬 WhatsApp Admin
+  </a>
+
+  <!-- HELPLINES -->
+  <div style="display:flex; gap:8px; justify-content:center; margin:10px 0; flex-wrap:wrap;">
+    <a href="tel:181" style="background:rgba(255,255,255,0.2); color:white; padding:10px 18px; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold;">📞 181</a>
+    <a href="tel:100" style="background:rgba(255,255,255,0.2); color:white; padding:10px 18px; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold;">👮 100</a>
+    <a href="tel:108" style="background:rgba(255,255,255,0.2); color:white; padding:10px 18px; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold;">🚑 108</a>
+  </div>
+
+  <button onclick="closeSOSPopup()"
+    style="background:transparent; border:2px solid rgba(255,255,255,0.5);
+    color:white; padding:10px 30px; border-radius:20px; font-size:14px; cursor:pointer; margin-top:10px;">
+    ✖ Cancel
+  </button>
+</div>
+
+<style>
+@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.2); } }
+</style>
+
+<div class="features">
+  <div class="feature-card"><div class="icon">🚨</div><h3>Quick SOS Alert</h3><p>One-click emergency alert with your live location.</p></div>
+  <div class="feature-card"><div class="icon">📍</div><h3>Live Location</h3><p>Share your real-time location with emergency contacts.</p></div>
+  <div class="feature-card"><div class="icon">👮</div><h3>Police Support</h3><p>Direct connection to police helpline services.</p></div>
+  <div class="feature-card"><div class="icon">⚖️</div><h3>Legal Help</h3><p>Free legal advice and counseling for women.</p></div>
+  <div class="feature-card"><div class="icon">🤝</div><h3>NGO Network</h3><p>Connected with NGOs for real on-ground support.</p></div>
+</div>
+
+<div class="helpline">
+  <h2>📞 Emergency Helpline Numbers</h2>
+  <div class="helpline-numbers">
+    <div class="helpline-box"><h1>181</h1><p>Women Helpline</p></div>
+    <div class="helpline-box"><h1>100</h1><p>Police</p></div>
+    <div class="helpline-box"><h1>108</h1><p>Ambulance</p></div>
+    <div class="helpline-box"><h1>1930</h1><p>Cyber Crime</p></div>
+    <div class="helpline-box"><h1>1091</h1><p>Women in Distress</p></div>
+  </div>
+</div>
+
+<footer><p>© 2024 Women Safety & Welfare System | All Rights Reserved</p></footer>
+
+<script>
+function sendSOS(){
+  var emergencyName     = localStorage.getItem("emergency_name")     || "Emergency Contact";
+  var emergencyPhone    = localStorage.getItem("emergency_phone")    || "181";
+  var emergencyRelation = localStorage.getItem("emergency_relation") || "";
+  var userName          = localStorage.getItem("user_name")          || "User";
+  var userPhone         = localStorage.getItem("user_phone")         || "";
+
+  // Show SOS screen immediately
+  document.getElementById("sosScreen").style.display = "flex";
+  document.getElementById("sos_name").innerText       = emergencyName;
+  document.getElementById("sos_rel").innerText        = emergencyRelation;
+  document.getElementById("sos_phone").innerText      = emergencyPhone;
+
+  // Set call button — use window.open so page does NOT navigate away
+  document.getElementById("sos_call_btn").onclick = function(e){
+    e.preventDefault();
+    window.open("tel:" + emergencyPhone);
+  };
+
+  // Get live location then build WhatsApp links
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(async function(pos){
+      var lat = pos.coords.latitude;
+      var lng = pos.coords.longitude;
+
+      document.getElementById("sos_location_status").innerText = "📍 Location captured!";
+
+      try {
+        const res  = await fetch("/api/sos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_name:       userName,
+            user_phone:      userPhone,
+            emergency_phone: emergencyPhone,
+            latitude:        lat,
+            longitude:       lng
+          })
+        });
+        const data = await res.json();
+
+        if(data.success){
+          // Enable WhatsApp buttons
+          document.getElementById("sos_wa_emergency").href    = data.whatsapp_emergency;
+          document.getElementById("sos_wa_admin").href        = data.whatsapp_admin;
+          document.getElementById("sos_wa_emergency").style.opacity = "1";
+          document.getElementById("sos_wa_admin").style.opacity     = "1";
+          document.getElementById("sos_location_status").innerHTML  =
+            `📍 Location ready! <a href="${data.maps_link}" target="_blank" style="color:white;text-decoration:underline;">View on Map</a>`;
+        }
+      } catch(e){
+        document.getElementById("sos_location_status").innerText = "⚠️ Server error. Use buttons below.";
+      }
+
+    }, function(){
+      document.getElementById("sos_location_status").innerText = "⚠️ Enable GPS for location sharing.";
+      // Still set WhatsApp without location
+      var msg = encodeURIComponent("🚨 SOS ALERT!\n\n" + userName + " needs immediate help!\n📞 " + userPhone + "\n\n⚠️ Location unavailable.");
+      document.getElementById("sos_wa_emergency").href = "https://wa.me/" + emergencyPhone.replace(/\D/g,"") + "?text=" + msg;
+      document.getElementById("sos_wa_emergency").style.opacity = "1";
+    });
+  }
+}
+
+function closeSOSPopup(){
+  document.getElementById("sosScreen").style.display = "none";
+}
+</script>
+
+</body>
+</html>

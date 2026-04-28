@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Users - Admin</title>
+<style>
+body{ margin:0; font-family:Arial,sans-serif; background:#fff0f5; }
+header{ background:#d63384; color:white; padding:15px; text-align:center; }
+.section{ padding:30px; max-width:900px; margin:auto; }
+h2{ color:#b30059; }
+table{ width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+th{ background:#d63384; color:white; padding:12px; text-align:left; }
+td{ padding:10px 12px; border-bottom:1px solid #f0c0d0; font-size:13px; }
+tr:hover{ background:#fff0f5; }
+.back-btn{ display:inline-block; margin-bottom:15px; padding:8px 18px; background:#d63384; color:white; text-decoration:none; border-radius:5px; }
+#loading{ text-align:center; padding:20px; color:#888; }
+</style>
+</head>
+<body>
+<header><h2>Admin - Registered Users</h2></header>
+<div class="section">
+  <a href="wadmin.html" class="back-btn">← Back to Dashboard</a>
+  <h2>All Registered Users</h2>
+  <p id="loading">Loading users...</p>
+  <table id="userTable" style="display:none;">
+    <thead>
+      <tr><th>#</th><th>Full Name</th><th>Email</th><th>Phone</th><th>Emergency Contact</th><th>Emergency Phone</th><th>Registered On</th></tr>
+    </thead>
+    <tbody id="userBody"></tbody>
+  </table>
+</div>
+
+<script>
+async function loadUsers(){
+    try {
+        const res  = await fetch("/api/users/all");
+        const data = await res.json();
+        document.getElementById("loading").style.display = "none";
+
+        if(data.success && data.users.length > 0){
+            document.getElementById("userTable").style.display = "table";
+            var html = "";
+            data.users.forEach(function(u, i){
+                html += "<tr><td>" + (i+1) + "</td><td>" + u.fullname + "</td><td>" + u.email + "</td><td>" + u.phone + "</td><td>" + (u.emergency_name||"—") + " (" + (u.emergency_relation||"—") + ")</td><td>" + (u.emergency_phone||"—") + "</td><td>" + new Date(u.createdAt).toLocaleDateString() + "</td></tr>";
+            });
+            document.getElementById("userBody").innerHTML = html;
+        } else {
+            document.getElementById("loading").innerText = "No users found.";
+            document.getElementById("loading").style.display = "block";
+        }
+    } catch(err){
+        document.getElementById("loading").innerText = "Error loading data.";
+    }
+}
+loadUsers();
+</script>
+</body>
+</html>

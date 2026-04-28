@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register - Women Safety</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #ffe6f0; }
+header { background: #d63384; color: white; padding: 15px; text-align: center; }
+nav { background: #f8c6d8; padding: 10px; text-align: center; }
+nav a { margin: 0 15px; text-decoration: none; color: #333; font-weight: bold; }
+.section { padding: 30px 20px; max-width: 520px; margin: auto; }
+h2 { color: #b30059; text-align: center; margin-bottom: 20px; }
+.form-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+.section-title {
+  background: #d63384; color: white;
+  padding: 8px 15px; border-radius: 6px;
+  margin: 20px 0 15px; font-size: 14px; font-weight: bold;
+}
+label { font-weight: bold; display: block; margin-top: 12px; font-size: 14px; color: #333; }
+input, select {
+  width: 100%; padding: 10px; margin-top: 5px;
+  border-radius: 6px; border: 1px solid #ccc; font-size: 14px;
+}
+input:focus, select:focus { border-color: #d63384; outline: none; }
+button {
+  width: 100%; padding: 13px; margin-top: 25px;
+  background: #d63384; color: white;
+  border: none; font-size: 16px; cursor: pointer;
+  border-radius: 25px; font-weight: bold;
+}
+button:hover { background: #b30059; }
+.footer { background: #d63384; color: white; padding: 15px; text-align: center; margin-top: 30px; font-size: 13px; }
+p { text-align: center; margin-top: 15px; font-size: 14px; }
+a { color: #d63384; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header><h2>🌸 Women Safety & Welfare System</h2></header>
+<nav><a href="wlogin.html">← Back to Login</a></nav>
+
+<div class="section">
+<h2>Create Account</h2>
+<div class="form-box">
+<form onsubmit="registerUser(); return false;">
+
+  <div class="section-title">👤 Personal Information</div>
+
+  <label>Full Name</label>
+  <input type="text" id="fullname" placeholder="Enter your full name" required>
+
+  <label>Email</label>
+  <input type="email" id="email" placeholder="Enter your email" required>
+
+  <label>Phone Number</label>
+  <input type="text" id="phone" placeholder="Enter your phone number" required>
+
+  <label>Password</label>
+  <input type="password" id="password" placeholder="Create password (min 6 chars)" required>
+
+  <label>Confirm Password</label>
+  <input type="password" id="confirm" placeholder="Confirm your password" required>
+
+  <div class="section-title">🚨 Emergency Contact</div>
+  <p style="font-size:13px; color:#888; text-align:left; margin-bottom:10px;">
+    This person will be called when you press Emergency SOS.
+  </p>
+
+  <label>Emergency Contact Name</label>
+  <input type="text" id="emergency_name" placeholder="e.g. Mom, Dad, Sister" required>
+
+  <label>Emergency Contact Phone</label>
+  <input type="text" id="emergency_phone" placeholder="Their phone number" required>
+
+  <label>Relation</label>
+  <select id="emergency_relation" required>
+    <option value="">-- Select Relation --</option>
+    <option>Mother</option>
+    <option>Father</option>
+    <option>Sister</option>
+    <option>Brother</option>
+    <option>Husband</option>
+    <option>Friend</option>
+    <option>Other</option>
+  </select>
+
+  <button type="submit" id="regBtn">✅ Register</button>
+  <p>Already have an account? <a href="wlogin.html">Login here</a></p>
+
+</form>
+</div>
+</div>
+
+<div class="footer"><p>Women Helpline: 181 | Police: 100 | Ambulance: 108</p></div>
+
+<script>
+async function registerUser(){
+  var fullname           = document.getElementById("fullname").value;
+  var email              = document.getElementById("email").value;
+  var phone              = document.getElementById("phone").value;
+  var password           = document.getElementById("password").value;
+  var confirm            = document.getElementById("confirm").value;
+  var emergency_name     = document.getElementById("emergency_name").value;
+  var emergency_phone    = document.getElementById("emergency_phone").value;
+  var emergency_relation = document.getElementById("emergency_relation").value;
+  var btn                = document.getElementById("regBtn");
+
+  if(password !== confirm){ alert("Passwords do not match!"); return; }
+  if(password.length < 6){ alert("Password must be at least 6 characters."); return; }
+
+  btn.disabled = true; btn.innerText = "Registering...";
+
+  try {
+    const res  = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fullname, email, phone, password, emergency_name, emergency_phone, emergency_relation })
+    });
+    const data = await res.json();
+    if(data.success){
+      alert("✅ Registration Successful! Please login.");
+      window.location.href = "wlogin.html";
+    } else {
+      alert(data.message || "Registration failed!");
+    }
+  } catch(err){
+    alert("Cannot connect to server. Make sure server is running.");
+  }
+
+  btn.disabled = false; btn.innerText = "✅ Register";
+}
+</script>
+</body>
+</html>
