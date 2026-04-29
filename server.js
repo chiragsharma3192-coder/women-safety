@@ -52,11 +52,20 @@ app.post("/api/sos", async (req, res) => {
       `🚨 *SOS ALERT!*\n\n*${user_name}* needs immediate help!\n📞 Her Phone: ${user_phone}\n\n📍 *Live Location:*\n${mapsLink}\n\n_Sent from Women Safety App_`
     );
     const ADMIN_WHATSAPP = process.env.ADMIN_WHATSAPP || "917387214232";
+
+    // Auto add 91 country code if not present
+    function formatPhone(phone){
+      var p = phone.replace(/\D/g, ""); // remove non-digits
+      if(p.startsWith("91") && p.length === 12) return p;
+      if(p.length === 10) return "91" + p;
+      return p;
+    }
+
     res.json({
       success: true,
       maps_link: mapsLink,
-      whatsapp_emergency: `https://wa.me/${emergency_phone.replace(/\D/g,"")}?text=${msg}`,
-      whatsapp_admin:     `https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`
+      whatsapp_emergency: `https://wa.me/${formatPhone(emergency_phone)}?text=${msg}`,
+      whatsapp_admin:     `https://wa.me/${formatPhone(ADMIN_WHATSAPP)}?text=${msg}`
     });
   } catch(err) { res.json({ success: false, message: err.message }); }
 });
