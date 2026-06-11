@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #ffe6f0;
+    text-align: center;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+input {
+    padding: 10px;
+    margin: 6px;
+    width: 250px;
+}
+
+button {
+    padding: 10px;
+    width: 270px;
+    background: #d63384;
+    color: white;
+    border: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Register</h2>
+
+    <input id="name" placeholder="Name"><br>
+    <input id="email" placeholder="Email"><br>
+    <input id="password" type="password" placeholder="Password"><br>
+    <input id="phone" placeholder="Phone"><br>
+
+    <h3>Emergency Contacts</h3>
+    <input id="c1" placeholder="Contact 1"><br>
+    <input id="c2" placeholder="Contact 2"><br>
+
+    <button onclick="register()">Register</button>
+</div>
+
+<script>
+function register(){
+    fetch('http://localhost:5000/register',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            name: name.value,
+            email: email.value,
+            password: password.value,
+            phone: phone.value,
+            emergencyContacts: [c1.value, c2.value]
+        })
+    })
+    .then(res=>res.text())
+    .then(msg=>{
+        alert(msg);
+        window.location = "login.html";
+    });
+}
+</script>
+
+</body>
+</html>
