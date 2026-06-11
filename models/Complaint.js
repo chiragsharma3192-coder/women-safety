@@ -7,7 +7,10 @@ const complaintSchema = new mongoose.Schema({
   complaint_type: { type: String, required: true },
   location:       { type: String, required: true },
   description:    { type: String, required: true },
-  submittedAt:    { type: Date, default: Date.now }
+  status:         { type: String, default: "Pending", enum: ["Pending", "In Progress", "Resolved"] },
+  admin_remark:   { type: String, default: "" },
+  submittedAt:    { type: Date, default: Date.now },
+  updatedAt:      { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("Complaint", complaintSchema);
